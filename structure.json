@@ -3,122 +3,122 @@
     {
       "conversation": {
         "conversation_id": {
-          "id": string
+          "id": "string"
         },
         "conversation": {
           "id": {
-            "id": string
+            "id": "string"
           },
-          "type": string,
+          "type": "string",
           "self_conversation_state": {
             "self_read_state": {
               "participant_id": {
-                "gaia_id": string,
-                "chat_id": string
+                "gaia_id": "string",
+                "chat_id": "string"
               },
-              "latest_read_timestamp": timestamp
+              "latest_read_timestamp": "timestamp"
             },
-            "status": string,
-            "notification_level": string,
+            "status": "string",
+            "notification_level": "string",
             "view": [
-              string
+              "string"
             ],
             "inviter_id": {
-              "gaia_id": string,
-              "chat_id": string
+              "gaia_id": "string",
+              "chat_id": "string"
             },
-            "invite_timestamp": timestamp,
-            "sort_timestamp": timestamp,
-            "active_timestamp": timestamp,
+            "invite_timestamp": "timestamp",
+            "sort_timestamp": "timestamp",
+            "active_timestamp": "timestamp",
             "delivery_medium_option": [
               {
                 "delivery_medium": {
-                  "medium_type": string
+                  "medium_type": "string"
                 },
-                "current_default": boolean
+                "current_default": "boolean"
               }
             ],
-            "is_guest": boolean
+            "is_guest": "boolean"
           },
           "read_state": [
             {
               "participant_id": {
-              "gaia_id": string,
-              "chat_id": string
+              "gaia_id": "string",
+              "chat_id": "string"
             },
-            "latest_read_timestamp": timestamp
+            "latest_read_timestamp": "timestamp"
             }
           ],
-          "has_active_hangout": boolean,
-          "otr_status": string,
-          "otr_toggle": string,
+          "has_active_hangout": "boolean",
+          "otr_status": "string",
+          "otr_toggle": "string",
           "current_participant": [
             {
-              "gaia_id": string,
-              "chat_id": string
+              "gaia_id": "string",
+              "chat_id": "string"
             }
           ],
           "participant_data": [
             "id": {
-              "gaia_id": string,
-              "chat_id": string
+              "gaia_id": "string",
+              "chat_id": "string"
             },
-            "fallback_name": string,
-            "invitation_status": string,
-            "participant_type": string,
-            "new_invitation_status": string,
-            "in_different_customer_as_requester": boolean,
-            "domain_id": int
+            "fallback_name": "string",
+            "invitation_status": "string",
+            "participant_type": "string",
+            "new_invitation_status": "string",
+            "in_different_customer_as_requester": "boolean",
+            "domain_id": "int"
           ],
-          "fork_on_external_invite": boolean,
+          "fork_on_external_invite": "boolean",
           "network_type": [
-            string
+            "string"
           ],
-          "force_history_state": string,
-          "group_link_sharing_status": string
+          "force_history_state": "string",
+          "group_link_sharing_status": "string"
         }
       },
       "events": [
         {
           "conversation_id": {
-            "id": string
+            "id": "string"
           },
           "sender_id": {
-            "gaia_id": string
-            "chat_id": string
+            "gaia_id": "string",
+            "chat_id": "string"
           },
-          "timestamp": timestamp,
+          "timestamp": "timestamp",
           "self_event_state": {
             "user_id": {
-              "gaia_id": string,
-              "chat_id": string
+              "gaia_id": "string",
+              "chat_id": "string"
             },
-            "notification_level": string
+            "notification_level": "string"
           },
           "chat_message": {
             "message_content": {
               "segment": [
                 {
-                  "type": string,
-                  "text": string,
+                  "type": "string",
+                  "text": "string",
                   "formatting": {
-                    "bold": boolean,
-                    "italics": boolean,
-                    "strikethrough": boolean,
-                    "underline": boolean
+                    "bold": "boolean",
+                    "italics": "boolean",
+                    "strikethrough": "boolean",
+                    "underline": "boolean"
                   }
                 }
               ]
             }
           },
-          "event_id": string,
-          "advances_sort_timestamp": boolean,
-          "event_otr": string,
+          "event_id": "string",
+          "advances_sort_timestamp": "boolean",
+          "event_otr": "string",
           "delivery_medium": {
-            "medium_type": string
+            "medium_type": "string"
           },
-          "event_type": string,
-          "event_version": timestamp
+          "event_type": "string",
+          "event_version": "timestamp"
         }
       ]
     }

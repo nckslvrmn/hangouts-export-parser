@@ -1,0 +1,89 @@
+#!/usr/bin/env ruby
+
+require 'json'
+
+SKIP_EVENTS = %w[
+  RENAME_CONVERSATION
+  ADD_USER
+  REMOVE_USER
+  HANGOUT_EVENT
+  START_HANGOUT
+  END_HANGOUT
+].freeze
+
+def all_chat_users
+  raw_users = @data['conversations'].length.times.map do |i|
+    @data['conversations'][i]['conversation']['conversation']['participant_data']
+  end.flatten.compact
+  simplified_users = raw_users.map do |u|
+    { id: u['id']['chat_id'], name: u['fallback_name'] }
+  end.flatten.compact
+  uniq_users = {}
+  simplified_users.each do |u|
+    if uniq_users[u[:id]].nil?
+      uniq_users[u[:id]] = u[:name] || 'no name'
+    elsif uniq_users[u[:id]] == 'no name' && u[:name] != 'no name'
+      uniq_users[u[:id]] = u[:name]
+    end
+  end
+  uniq_users
+end
+
+def parse_conversation(conversation)
+  simplified_conversation = []
+  conversation['events'].each do |event|
+    next if SKIP_EVENTS.include?(event['event_type'])
+
+    content = if event['chat_message']['message_content']['segment']
+                combine_message(event['chat_message']['message_content']['segment'])
+              elsif event['chat_message']['message_content']['attachment']
+                combine_attachments(event['chat_message']['message_content']['attachment'])
+              end
+    simplified_conversation.push(
+      timestamp: event['timestamp'].to_i,
+      friendly_timestamp: Time.at(event['timestamp'].to_i / 1_000_000),
+      user: @users[event['sender_id']['chat_id']],
+      content: content
+    )
+  end
+  simplified_conversation
+end
+
+def combine_message(segments)
+  messages = segments.map do |segment|
+    %w[TEXT LINK].include?(segment['type']) ? segment['text'] : segment['type']
+  end.flatten.compact
+  messages.join(' ')
+end
+
+def combine_attachments(attachments)
+  atts = attachments.map do |att|
+    att['embed_item']['plus_photo']['url']
+  end.flatten.compact
+  atts.join(' ')
+end
+
+def main
+  Dir.mkdir('exports') unless File.directory?('exports')
+  puts "loading #{ARGV[0]} file..."
+  @data = JSON.parse(File.read(ARGV[0]))
+  puts "found #{@data['conversations'].length} conversations"
+  @users = all_chat_users
+  current_index = 0
+  @data['conversations'].each do |conversation|
+    next if conversation['events'].nil?
+
+    conversation_users = conversation['conversation']['conversation']['participant_data'].map do |p|
+      p['id']['chat_id']
+    end.flatten.compact
+    users = conversation_users.map { |u| @users[u] }.flatten.compact
+    puts "(#{current_index + 1}/#{@data['conversations'].length}) parsing conversation with #{users.join(', ')}"
+    parsed = parse_conversation(conversation)
+    sorted = parsed.sort_by! { |m| m[:timestamp] }
+    output = { users: users, conversation: sorted }
+    File.write("exports/#{conversation['conversation']['conversation_id']['id']}.json", JSON.pretty_generate(output))
+    current_index += 1
+  end
+end
+
+main

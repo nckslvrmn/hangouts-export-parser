@@ -59,16 +59,18 @@
             }
           ],
           "participant_data": [
-            "id": {
-              "gaia_id": "string",
-              "chat_id": "string"
-            },
-            "fallback_name": "string",
-            "invitation_status": "string",
-            "participant_type": "string",
-            "new_invitation_status": "string",
-            "in_different_customer_as_requester": "boolean",
-            "domain_id": "int"
+            {
+              "id": {
+                "gaia_id": "string",
+                "chat_id": "string"
+              },
+              "fallback_name": "string",
+              "invitation_status": "string",
+              "participant_type": "string",
+              "new_invitation_status": "string",
+              "in_different_customer_as_requester": "boolean",
+              "domain_id": "int"
+            }
           ],
           "fork_on_external_invite": "boolean",
           "network_type": [

@@ -51,7 +51,7 @@ end
 
 def combine_message(segments)
   messages = segments.map do |segment|
-    %w[TEXT LINK].include?(segment['type']) ? segment['text'] : segment['type']
+    %w[TEXT LINK].include?(segment['type']) ? segment['text'] : ' '
   end.flatten.compact
   messages.join(' ')
 end

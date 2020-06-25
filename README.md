@@ -1,14 +1,15 @@
-### Hangouts.json Parser
+Hangouts.json Parser
+===
 
-# Introduction
+## Introduction
 I tried using every `Hangouts.json` parser I could find but they were all browser based and crashed when I tried parsing my 500MB+ payload. This CLI based parser doesnt.
 
-# Usage
+## Usage
 ```
 ./parse path/to/Hangouts.json
 ```
 
-# Behavior
+## Behavior
 This tool will export a simplified JSON file for each conversation under the `exports/` directory. It will be named after the internal conversation ID which is pretty useless but at least unique.
 
 The content of the file will be as follows:

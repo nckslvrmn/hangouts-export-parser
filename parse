@@ -59,7 +59,7 @@ end
 def combine_attachments(attachments)
   atts = attachments.map do |att|
     begin
-      att['embed_item']['plus_photo']['url'] rescue att
+      att['embed_item']['plus_photo']['url']
     rescue NoMethodError
       puts att
       raise

@@ -58,11 +58,19 @@ end
 
 def combine_attachments(attachments)
   atts = attachments.map do |att|
-    begin
-      att['embed_item']['plus_photo']['url']
-    rescue NoMethodError
-      puts att
-      raise
+    case att['embed_item']['type'][0]
+    when 'PLUS_PHOTO'
+      case att['embed_item']['plus_photo']['media_type']
+      when 'PHOTO'
+        att['embed_item']['plus_photo']['url']
+      when 'VIDEO'
+        # this isnt curl-able as it requires JS to redirect to real video
+        att['embed_item']['plus_photo']['thumbnail']['url']
+      end
+    when 'PLUS_AUDIO_V2'
+      att['embed_item']['plus_audio_v2']['embed_url']
+    else
+      'unsupported attachment type'
     end
   end.flatten.compact
   atts.join(' ')

@@ -58,7 +58,12 @@ end
 
 def combine_attachments(attachments)
   atts = attachments.map do |att|
-    att['embed_item']['plus_photo']['url']
+    begin
+      att['embed_item']['plus_photo']['url'] rescue att
+    rescue NoMethodError
+      puts att
+      raise
+    end
   end.flatten.compact
   atts.join(' ')
 end

@@ -41,7 +41,7 @@ def parse_conversation(conversation)
               end
     simplified_conversation.push(
       timestamp: event['timestamp'].to_i,
-      friendly_timestamp: Time.at(event['timestamp'].to_i / 1_000_000),
+      friendly_timestamp: Time.at(event['timestamp'].to_i / 1_000_000).strftime('%H:%M %D'),
       user: @users[event['sender_id']['chat_id']],
       content: content
     )
@@ -77,7 +77,7 @@ def main
       p['id']['chat_id']
     end.flatten.compact
     users = conversation_users.map { |u| @users[u] }.flatten.compact
-    puts "(#{current_index + 1}/#{@data['conversations'].length}) parsing conversation with #{users.join(', ')}"
+    puts "(#{current_index + 1}/#{@data['conversations'].length}) parsing conversation with #{users.join(', ')} (#{conversation['events'].length} messages)"
     parsed = parse_conversation(conversation)
     sorted = parsed.sort_by! { |m| m[:timestamp] }
     output = { users: users, conversation: sorted }

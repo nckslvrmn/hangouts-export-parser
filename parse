@@ -37,7 +37,7 @@ def parse_conversation(conversation)
     content = if event['chat_message']['message_content']['segment']
                 combine_message(event['chat_message']['message_content']['segment'])
               elsif event['chat_message']['message_content']['attachment']
-                combine_attachments(event['chat_message']['message_content']['attachment'])
+                parse_attachments(event['chat_message']['message_content']['attachment'])
               end
     simplified_conversation.push(
       timestamp: event['timestamp'].to_i,
@@ -56,24 +56,24 @@ def combine_message(segments)
   messages.join(' ')
 end
 
-def combine_attachments(attachments)
+def parse_attachments(attachments)
   atts = attachments.map do |att|
     case att['embed_item']['type'][0]
     when 'PLUS_PHOTO'
       case att['embed_item']['plus_photo']['media_type']
       when 'PHOTO'
-        att['embed_item']['plus_photo']['url']
+        { type: 'image', url: att['embed_item']['plus_photo']['url'] }
       when 'VIDEO'
         # this isnt curl-able as it requires JS to redirect to real video
-        att['embed_item']['plus_photo']['thumbnail']['url']
+        { type: 'video', url: att['embed_item']['plus_photo']['thumbnail']['url'] }
       end
     when 'PLUS_AUDIO_V2'
-      att['embed_item']['plus_audio_v2']['embed_url']
+      { type: 'audio', url: att['embed_item']['plus_audio_v2']['embed_url'] }
     else
-      'unsupported attachment type'
+      { type: 'unknown', url: nil }
     end
   end.flatten.compact
-  atts.join(' ')
+  atts
 end
 
 def main

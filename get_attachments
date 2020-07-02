@@ -1,0 +1,27 @@
+#!/usr/bin/env ruby
+
+require 'json'
+require 'down'
+require 'progress_bar'
+
+file = ARGV[0]
+basename = File.basename(file, File.extname(file))
+Dir.mkdir("exports/#{basename}") unless File.directory?("exports/#{basename}")
+data = JSON.parse(File.read(file))
+
+links = data['conversation'].map do |c|
+  next unless c['content'].is_a?(Array)
+
+  c['content'].map do |a|
+    a['url'] if a['type'] == 'image'
+  end.flatten.compact
+end.flatten.compact
+
+total = links.length
+bar = ProgressBar.new(total)
+
+total.times do |i|
+  fname = "exports/#{basename}/#{i}_#{links[i].split('/').last}"
+  Down.download(links[i], destination: fname) unless File.exist?(fname)
+  bar.increment!
+end

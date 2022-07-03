@@ -22,6 +22,10 @@ bar = ProgressBar.new(total)
 
 total.times do |i|
   fname = "exports/#{basename}/#{i}_#{links[i].split('/').last}"
-  Down.download(links[i], destination: fname) unless File.exist?(fname)
+  begin
+    Down.download(links[i], destination: fname) unless File.exist?(fname)
+  rescue => e
+    puts "Unable to download #{links[i]}, destination #{fname}: #{e}"
+  end
   bar.increment!
 end
